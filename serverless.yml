@@ -1,0 +1,52 @@
+service: uf-rest-api
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128 # set the maximum memory of the Lambdas in Megabytes
+  timeout: 10 # the timeout is 10 seconds (default is 6 seconds)
+  stage: dev # setting the env stage to dev, this will be visible in the routes
+  region: us-east-1
+
+functions:
+  create:
+    handler: handler.create # points to exported function in handler.js
+    events:
+      - http:
+          path: markers
+          method: post
+          cors: true
+  getOne:
+    handler: handler.getOne
+    events:
+      - http:
+          path: markers/{id} # path will be domain.name.com/dev/markers/1
+          method: get
+          cors: true
+  getAll:
+    handler: handler.getAll
+    events:
+      - http:
+          path: markers
+          method: get
+          cors: true
+  update:
+    handler: handler.update
+    events:
+      - http:
+          path: markers/{id}
+          method: put
+          cors: true
+  delete:
+    handler: handler.delete
+    events:
+      - http:
+          path: markers/{id}
+          method: delete
+          cors: true
+
+plugins:
+  - serverless-offline
